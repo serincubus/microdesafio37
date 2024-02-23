@@ -40,10 +40,71 @@ const moviesController={
         })
 
 
-        }
-       }
-          
+        },
+        add:(req,res)=>{
+            
+            return res.render('moviesAdd',{title:"New Movie"})
+        }, 
+        create:(req,res)=>{
+            console.log("esto es req.body:", req.body);
+            const {title,rating,awards,release_date,length} = req.body;
+            
+            db.Movie.create({
+                title,
+                rating,
+                awards,
+                release_date,
+                length
+            })
+            .then(() =>{
+               res.redirect('/movies')
+            })
+                             
+            },
+        
+            edit:(req,res)=>{
+                id=req.params.id,
+                db.Movie.findByPk(id)
+                 .then(movie =>{
+                    return res.render('moviesEdit',{Movie:movie})
+                 })
+            },
+       
+            update:(req,res)=>{
+                console.log("esto es req.body:",req.body);
+                
+                const {title, rating, awards, release_date, length} = req.body;
+                db.Movie.update({
+                    title:title,
+                    rating:rating,
+                    awards:awards,
+                    release_date:release_date,
+                    length:length
+                },{
+                    where:{
+                        id:req.params.id,
+                    }
+                })
+                   .then(()=>{
+                    return res.redirect('/movies')
+                })
 
+                },
+                destroy:(req,res)=>{
+                    
+                    db.Movie.destroy({
+                        where:{
+                            id:req.params.id
+                        }
+                    })
+                     .then(() =>{
+                        return res.redirect('/movies')
+                     })
+                },
+               
 
+               
+            }
 
+                
 module.exports= moviesController;
