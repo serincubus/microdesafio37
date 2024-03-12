@@ -17,6 +17,8 @@
     <p>AWARDS: <%= movie.awards %> </p>
     <p>LENGTH: <%= movie.length + ' min'%> </p>
     <p>RELEASE DATE: <%= movie.release_date %> </p>
+    <button><a href="/movies/add">AGREGAR</a></button>
+    <button><a href="/movies">LISTADO DE PELICULAS</a></button>
     <button><a href="/movies/edit/<%= movie.id %>">EDITAR</a></button>
     <form action="/movies/delete/<%= movie.id%>?_method=delete" method="post">
         <p> <button type="submit">Borrar Pelicula</button>  

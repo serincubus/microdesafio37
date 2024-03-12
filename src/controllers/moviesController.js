@@ -1,5 +1,6 @@
 const path=require("path");
 const db=require("../database/models");
+const { generatePrimeSync } = require("crypto");
 
 const moviesController={
       
@@ -42,8 +43,16 @@ const moviesController={
 
         },
         add:(req,res)=>{
-            
-            return res.render('moviesAdd',{title:"New Movie"})
+          db.Movie.findAll()
+
+         .then((movies)=>   
+         db.Genres.findAll() 
+        
+        .then((allGeneros)=>{
+        return res.render('moviesAdd',{title:"New Movie",movies, allGeneros});
+
+    }))
+           
         }, 
         create:(req,res)=>{
             console.log("esto es req.body:", req.body);
