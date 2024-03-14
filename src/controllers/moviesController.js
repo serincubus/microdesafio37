@@ -1,6 +1,7 @@
 const path=require("path");
 const db=require("../database/models");
 const { generatePrimeSync } = require("crypto");
+const { Association } = require("sequelize");
 
 const moviesController={
       
@@ -12,8 +13,11 @@ const moviesController={
        },
        detail:(req,res)=>{
         id=req.params.id,
-        db.Movie.findByPk(id)
+        db.Movie.findByPk(id,{
+            include:[{association:'genero'}]})
+                 
          .then(movie =>{
+            
             return res.render('moviesDetail',{movie})
          })
        },
@@ -56,14 +60,15 @@ const moviesController={
         }, 
         create:(req,res)=>{
             console.log("esto es req.body:", req.body);
-            const {title,rating,awards,release_date,length} = req.body;
+            const {title,rating,awards,release_date,length,genre_id} = req.body;
             
             db.Movie.create({
                 title,
                 rating,
                 awards,
                 release_date,
-                length
+                length,
+                genre_id
             })
             .then(() =>{
                res.redirect('/movies')
@@ -72,23 +77,31 @@ const moviesController={
             },
         
             edit:(req,res)=>{
-                id=req.params.id,
-                db.Movie.findByPk(id)
-                 .then(movie =>{
-                    return res.render('moviesEdit',{Movie:movie})
+                id=req.params.id
+                let promPelicula=db.Movie.findByPk(id);
+                let promGenero=db.Genres.findAll()
+                
+                Promise.all([promPelicula,promGenero]) 
+                
+                .then(([movie,genres]) =>{
+                    console.log("generos:",genres);
+                     return res.render('moviesEdit',{movie:movie,genres:genres})
                  })
             },
+        
        
             update:(req,res)=>{
                 console.log("esto es req.body:",req.body);
                 
-                const {title, rating, awards, release_date, length} = req.body;
+                const {title, rating, awards, release_date, length,genre_id} = req.body;
                 db.Movie.update({
                     title:title,
                     rating:rating,
                     awards:awards,
                     release_date:release_date,
-                    length:length
+                    length:length,
+                    genre_id:genre_id,
+                                       
                 },{
                     where:{
                         id:req.params.id,

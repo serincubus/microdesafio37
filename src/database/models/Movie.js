@@ -39,8 +39,8 @@ module.exports= (sequelize,DataTypes) => {
     const config = {
         tablename:"movies_db",
         timestamps:false,
-       /* createdAt: 'created_at',
-        updatedAt: 'updated_at'*/
+        createdAt: 'created_at',
+        updatedAt: 'updated_at'
     };
         
     const Movie= sequelize.define(alias,cols,config)
@@ -49,15 +49,15 @@ module.exports= (sequelize,DataTypes) => {
         Movie.belongsTo(models.Genres,{
           as: 'genero',
           foreignKey: 'genre_id'
-        }),
-        Movie.belongsToMany(models.Actors,{
+        })
+       /* Movie.belongsToMany(models.Actors,{
             as:'actores',
             through:'Actor_movie',
-            foreignKey:'actor_id',
-            otherKey:'movie_id',
+            foreignKey:'movie_id',
+            otherKey:'actor_id',
             createdAt: 'created_at',
             updateAt:'updated_at'
-        })
+        })*/
     }
     return Movie;
 

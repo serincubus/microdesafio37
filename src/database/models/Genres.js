@@ -33,7 +33,7 @@ module.exports=(sequelize,DataTypes)=>{
 
     Genres.associate= function(models) {
         Genres.hasMany(models.Movie,{
-          as: 'genero',
+          as: 'peliculas',
           foreignKey: 'genre_id'
         })
     }
